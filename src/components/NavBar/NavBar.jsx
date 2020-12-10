@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
+import CartWidget from '../CartWidget/CartWidget';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +42,7 @@ function NavBar() {
                         aria-labelledby="main navigation"
                         className={classes.navDisplayFlex}
                     >
+                        <CartWidget />
                         <a href="#" key="Cocina" className={classes.linkText}>
                             <ListItem button>
                                 <ListItemText primary="Cocina" />
