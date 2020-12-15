@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { IconButton } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,7 +12,9 @@ const useStyles = makeStyles((theme) => ({
 const CartWidget = () => {
     const classes = useStyles();
     return (
-        <ShoppingCartIcon className={classes.cartIcon} />
+        <IconButton className={classes.cartIcon} color="inherit" aria-label="menu">
+            <ShoppingCartIcon />
+        </IconButton>
     )
 }
 

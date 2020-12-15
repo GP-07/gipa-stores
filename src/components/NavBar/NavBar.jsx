@@ -42,7 +42,6 @@ function NavBar() {
                         aria-labelledby="main navigation"
                         className={classes.navDisplayFlex}
                     >
-                        <CartWidget />
                         <a href="#" key="Cocina" className={classes.linkText}>
                             <ListItem button>
                                 <ListItemText primary="Cocina" />
@@ -63,6 +62,7 @@ function NavBar() {
                                 <ListItemText primary="Baño" />
                             </ListItem>
                         </a>
+                        <CartWidget />
                     </List>
                 </Toolbar>
             </AppBar>
