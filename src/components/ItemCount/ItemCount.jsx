@@ -4,26 +4,18 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import "./ItemCount.css";
 
 const ItemCount = ({stock, initial, onAdd, onRemove}) => {
-    const plusOne = () => {
-        if (stock > 0 && initial + 1 <= stock) {
-            onAdd();
-        }
-    }
-
-    const minusOne = () => {
-        if (initial - 1 >= 0) {
-            onRemove();
-        }
+    const canBeAdded = () => {
+        return stock > 0 && initial + 1 <= stock;
     }
 
     return (
         <>
             <form>
-                <Fab size="small" color="primary" onClick={minusOne}>
+                <Fab disabled={initial - 1 < 0} size="small" color="primary" onClick={onRemove}>
                     <RemoveIcon />
                 </Fab>
-                <Input type="number" value={initial} />
-                <Fab size="small" color="primary" onClick={plusOne}>
+                <Input readOnly type="number" value={initial} inputProps={{style: { textAlign: 'center' }}} />
+                <Fab disabled={!canBeAdded()} size="small" color="primary" onClick={onAdd}>
                     <AddIcon />
                 </Fab>
             </form>
