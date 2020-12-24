@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import bajomesadaimg from '../../assets/bajomesada.jpg';
-import vanitoryimg from '../../assets/vanitory.jpg';
+import bajomesadaimg from '../../assets/img/bajomesada.jpg';
+import vanitoryimg from '../../assets/img/vanitory.jpg';
 import ItemList from '../ItemList/ItemList';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,0 +1,29 @@
+.container {
+    padding: 4rem 2rem;
+}
+
+.siders {
+    display: flex;
+}
+
+.sider {
+    padding-left: 2rem;
+}
+
+.square {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid black;
+}
+
+.blue-background {
+    background-color: blue;
+}
+
+.white-background {
+    background-color: white;
+}
+
+.black-background {
+    background-color: black;
+}
