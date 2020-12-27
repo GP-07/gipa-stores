@@ -1,20 +1,56 @@
+import { useState } from 'react'; 
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
     cartIcon: {
-        padding: theme.spacing(1, 2, 1, 2),
+        padding: theme.spacing(`0.25rem`, 2, 1, 2),
         fontSize: `2rem`
+    },
+    cartCounter: {
+        paddingLeft: `0.5rem`,
+        paddingBottom: `1.25rem`,
+        fontSize: `0.75rem`
+    },
+    sider: {
+        height: `100%`, /* Full-height: remove this if you want "auto" height */
+        width: `300px`, /* Set the width of the sidebar */
+        position: "fixed", /* Fixed Sidebar (stay in place on scroll) */
+        zIndex: 1, /* Stay on top */
+        top: `4.5rem`, /* Below the navbar */
+        right: `0.5rem`, /* Below the cart icon (i.e., on the right) */
+        backgroundColor: theme.palette.primary.main, /* Same color than the navbar */
+        overflowX: "hidden", /* Disable horizontal scroll */
+        paddingTop: `20px`
+    },
+    showSider: {
+        display: "block"
+    },
+    hideSider: {
+        display: "none"
     }
 }));
 
 const CartWidget = () => {
     const classes = useStyles();
+
+    const [openCart, setOpenCart] = useState(false);
+
+    const handleCartClick = () => {
+        setOpenCart(!openCart);
+    }
+
     return (
-        <IconButton className={classes.cartIcon} color="inherit" aria-label="menu">
-            <ShoppingCartIcon />
-        </IconButton>
+        <>
+            <IconButton className={classes.cartIcon} onClick={handleCartClick} color="inherit" aria-label="menu">
+                <ShoppingCartIcon />
+                <span className={classes.cartCounter}>0</span>
+            </IconButton>
+            <div className={`${classes.sider} ${openCart ? classes.showSider : classes.hideSider}`}>
+                <p>Productos del carrito</p>
+            </div>
+        </>
     )
 }
 
