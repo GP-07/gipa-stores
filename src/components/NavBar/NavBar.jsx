@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, IconButton, List } from '@material-ui/core';
 import LocalMallIcon from '@material-ui/icons/LocalMall';
 import CartWidget from '../CartWidget/CartWidget';
+import NavBarItem from '../NavBarItem/NavBarItem';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -13,19 +15,41 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
     },
+    linkBrand: {
+        color: `white`,
+        textDecoration: `none`
+    },
     navDisplayFlex: {
         display: `flex`,
         justifyContent: `space-between`
-    },
-    linkText: {
-        textDecoration: `none`,
-        textTransform: `uppercase`,
-        color: `white`
     }
 }));
 
 function NavBar() {
     const classes = useStyles();
+
+    const categories = [
+        {
+            id: 1,
+            url: "/category/1",
+            text: "Cocina"
+        },
+        {
+            id: 2,
+            url: "/category/2",
+            text: "Living/Comedor"
+        },
+        {
+            id: 3,
+            url: "/category/3",
+            text: "Habitación"
+        },
+        {
+            id: 4,
+            url: "/category/4",
+            text: "Baño"
+        },
+    ];
 
     return (
         <div className={classes.root}>
@@ -35,33 +59,18 @@ function NavBar() {
                         <LocalMallIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        GIPA-STORES - Equipamientos para el hogar
+                        <Link to="/" className={classes.linkBrand}>GIPA-STORES - Equipamientos para el hogar</Link>
                     </Typography>
                     <List 
                         component="nav" 
                         aria-labelledby="main navigation"
                         className={classes.navDisplayFlex}
                     >
-                        <a href="#" key="Cocina" className={classes.linkText}>
-                            <ListItem button>
-                                <ListItemText primary="Cocina" />
-                            </ListItem>
-                        </a>
-                        <a href="#" key="Living/Comedor" className={classes.linkText}>
-                            <ListItem button>
-                                <ListItemText primary="Living/Comedor" />
-                            </ListItem>
-                        </a>
-                        <a href="#" key="Habitación" className={classes.linkText}>
-                            <ListItem button>
-                                <ListItemText primary="Habitación" />
-                            </ListItem>
-                        </a>
-                        <a href="#" key="Baño" className={classes.linkText}>
-                            <ListItem button>
-                                <ListItemText primary="Baño" />
-                            </ListItem>
-                        </a>
+                        {
+                            categories.map(category => (
+                                <NavBarItem key={category.id} url={category.url} text={category.text} />
+                            ))
+                        }
                         <CartWidget />
                     </List>
                 </Toolbar>
