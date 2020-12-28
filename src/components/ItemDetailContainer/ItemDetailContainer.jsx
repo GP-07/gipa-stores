@@ -1,22 +1,32 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import ItemDetail from '../ItemDetail/ItemDetail';
-import { data } from '../../assets/data';
+import { getSelectedProduct } from '../../assets/data';
 
 const ItemDetailContainer = () => {
+    const { id } = useParams();
     const [item, setItem] = useState(null);
 
-    const getItem = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(data);
-        }, 2000);
-    });
+    const getItem = (id) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (id !== undefined) {
+                    // The first element from array returned. There should be only one element.
+                    resolve(getSelectedProduct(id)[0]);
+                } else {
+                    reject("Debe seleccionar un producto!");
+                }
+            }, 2000);
+        });
+    };
 
     useEffect(() => {
-        getItem
-            .then(response => setItem(response[0]))
+        console.log(`Selected product ${id}`);
+        getItem(id)
+            .then(response => setItem(response))
             .catch(error => console.log(error));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [id]);
 
     return (
         <>

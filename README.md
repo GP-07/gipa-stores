@@ -1,3 +1,7 @@
+# GIPA-STORES
+
+GIPA-STORES es un ecommerce orientado a todo cliente que necesite amueblar o remodelar su casa. Se ofrecen productos para los distintos ambientes y una muy buena experiencia de compra. El ecommerce tiene una sección inicial donde cada vez que ingrese podrá ver nuestros productos destacados. Luego, podrá moverse entre las categorías para ver los muebles de su interés. Y si desea, puede hacer click sobre un determinado producto para ver un mayor detalle del mismo.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

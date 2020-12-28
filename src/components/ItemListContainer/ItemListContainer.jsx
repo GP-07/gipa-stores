@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import bajomesadaimg from '../../assets/img/bajomesada.jpg';
-import vanitoryimg from '../../assets/img/vanitory.jpg';
 import ItemList from '../ItemList/ItemList';
+import { getRandomProducts, getProductFromCategory } from '../../assets/data';
 
 const useStyles = makeStyles((theme) => ({
     catalogue: {
@@ -13,34 +13,24 @@ const useStyles = makeStyles((theme) => ({
 
 const ItemListContainer = () => {
     const classes = useStyles();
+    const { id } = useParams();
     const [productsToBeListed, setProductsToBeListed] = useState([]);
 
-    const products = [
-        {
-            id: 1, 
-            title: "Mueble bajomesada",
-            image: bajomesadaimg,
-            stock: 5,
-            price: 200
-        },
-        {
-            id: 2, 
-            title: "Vanitory para baño",
-            image: vanitoryimg,
-            stock: 5,
-            price: 100
-        }
-    ];
+    const getProducts = (id) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (id === undefined) {
+                    resolve(getRandomProducts(4));
+                } else {
+                    resolve(getProductFromCategory(id));
+                }
+            }, 2000);
+        });
+    };
 
-    const getProducts = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(products);
-        }, 2000);
-    });
-
-    const loadProducts = async () => {
+    const loadProducts = async (id) => {
         try {
-            const result = await getProducts;
+            const result = await getProducts(id);
             setProductsToBeListed(result);
         } catch(error) {
             alert("Hubo un error al cargar los productos del catalogo");
@@ -48,9 +38,10 @@ const ItemListContainer = () => {
     };
 
     useEffect(() => {
-        loadProducts();
+        console.log(`Selected category ${id}`);
+        loadProducts(id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [id]);
 
     return (
         <>
