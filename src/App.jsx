@@ -3,6 +3,7 @@ import './App.css';
 import NavBar from './components/NavBar/NavBar';
 import ItemListContainer from './components/ItemListContainer/ItemListContainer';
 import ItemDetailContainer from './components/ItemDetailContainer/ItemDetailContainer';
+import Cart from './components/Cart/Cart';
 import NotFound from './components/NotFound/NotFound';
 
 function App() {
@@ -19,6 +20,9 @@ function App() {
           </Route>
           <Route path="/item/:id">
             <ItemDetailContainer />
+          </Route>
+          <Route path="/cart">
+            <Cart />
           </Route>
           <Route path="*">
             <NotFound />

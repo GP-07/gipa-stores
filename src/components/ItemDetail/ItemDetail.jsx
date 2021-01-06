@@ -1,8 +1,15 @@
+import { useHistory } from 'react-router-dom';
 import ItemCountContainer from '../ItemCountContainer/ItemCountContainer';
 import Button from '@material-ui/core/Button';
 import './ItemDetail.css';
 
 const ItemDetail = ({item}) => {
+    const history = useHistory();
+
+    const handleClickAddToCart = () => {
+        history.push("/cart");
+    }
+
     return (
         <article className="container">
             <h1>{item.title}</h1>
@@ -22,7 +29,7 @@ const ItemDetail = ({item}) => {
             <br />
             <ItemCountContainer stock={item.stock} />
             <br />
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleClickAddToCart}>
                 Agregar a carrito
             </Button>
         </article>
