@@ -1,15 +1,13 @@
-import { useState } from 'react';
 import ItemCount from '../ItemCount/ItemCount';
 
-const ItemCountContainer = ({stock}) => {
-    const [itemQuantity, setItemQuantity] = useState(0);
+const ItemCountContainer = ({stock, itemQuantity, modifyItemQuantity}) => {
 
     const addItem = () => {
-        setItemQuantity(itemQuantity + 1);
+        modifyItemQuantity(itemQuantity + 1);
     }
 
     const removeItem = () => {
-        setItemQuantity(itemQuantity - 1);
+        modifyItemQuantity(itemQuantity - 1);
     }
 
     return (
