@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import { CartContext } from '../../store/CartContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +26,17 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '100%',
         maxHeight: '100%',
     },
+    totalQuantity: {
+        fontWeight: "bold"
+    },
+    totalAmount: {
+        fontWeight: "bold"
+    },
+    actions: {
+        position: "absolute",
+        top: `5rem`,
+        right: `2rem`,
+    }
 }));
 
 const Cart = () => {
@@ -37,8 +49,19 @@ const Cart = () => {
         return item.data.price * item.quantity;
     }
 
+    const getTotal = () => {
+        let total = 0;
+        data.items.forEach(item =>
+            total = total + getSubtotalPerItem(item)
+        );
+        return total;
+    }
+
     return (
         <>
+        <Button className={classes.actions} variant="contained" color="primary">
+            Vaciar carrito
+        </Button>
         {
             data.items.map(item => (
                 <div key={item.data.id} className={classes.root}>
@@ -59,6 +82,9 @@ const Cart = () => {
                                     {item.data.description}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
+                                    {`Cantidad de este producto: ${item.quantity}`}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
                                     {`Precio unitario: ${item.data.price}`}
                                     </Typography>
                                 </Grid>
@@ -77,7 +103,18 @@ const Cart = () => {
                 </div>
             ))
         }
-        <p>{data.totalQuantity}</p>
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
+                <Grid container spacing={2}>
+                    <Grid item>
+                        <p className={classes.totalQuantity}>{`Cantidad total de productos: ${data.totalQuantity}`}</p>
+                    </Grid>
+                    <Grid item>
+                        <p className={classes.totalAmount}>{`Precio total: ${getTotal()}`}</p>
+                    </Grid>
+                </Grid>
+            </Paper>
+        </div>
         </>
     );
 }
