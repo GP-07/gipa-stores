@@ -18,15 +18,32 @@ const CartContextProvider = ({children}) => {
                 items: [...data.items, item],
                 totalQuantity: data.totalQuantity + item.quantity
             });
+        } else {
+            modifyItem(item);
         }
     }
     
     const removeItem = (itemIdToBeRemoved) => {
-        if (!!isInCart(itemIdToBeRemoved)) {
+        let elementToBeRemoved = isInCart(itemIdToBeRemoved);
+
+        if (!!elementToBeRemoved) {
             setData({
-                items: data.items.filter(item => item.data.id !== isInCart.data.id),
-                totalQuantity: data.totalQuantity - isInCart.quantity
+                items: data.items.filter(item => item.data.id !== elementToBeRemoved.data.id),
+                totalQuantity: data.totalQuantity - elementToBeRemoved.quantity
             });
+        }
+    }
+
+    const modifyItem = (itemToModify) => {
+        let elementToBeModify = data.items.findIndex(item => item.data.id === itemToModify.data.id)
+
+        if (elementToBeModify > -1) {
+            data.items[elementToBeModify].quantity = data.items[elementToBeModify].quantity + itemToModify.quantity;
+            setData({
+                items: data.items,
+                totalQuantity: data.totalQuantity + itemToModify.quantity
+            });
+            console.log(data.items);
         }
     }
     

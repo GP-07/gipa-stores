@@ -29,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Cart = () => {
     const classes = useStyles();
+
+    // UseContext : carga la data del carrito desde el contexto y también permite modificarla
     const [data] = useContext(CartContext);
 
     const getSubtotalPerItem = (item) => {
@@ -42,37 +44,34 @@ const Cart = () => {
                 <div key={item.data.id} className={classes.root}>
                     <Paper className={classes.paper}>
                         <Grid container spacing={2}>
-                        <Grid item>
-                            <ButtonBase className={classes.image}>
-                                <img className={classes.img} alt="complex" src={item.data.image} />
-                            </ButtonBase>
-                        </Grid>
-                        <Grid item xs={12} sm container>
-                            <Grid item xs container direction="column" spacing={2}>
-                            <Grid item xs>
-                                <Typography gutterBottom variant="subtitle1">
-                                {item.data.title}
-                                </Typography>
-                                <Typography variant="body2" gutterBottom>
-                                {item.data.description}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                Otra info
-                                </Typography>
-                            </Grid>
                             <Grid item>
-                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                Remove
-                                </Typography>
+                                <ButtonBase className={classes.image}>
+                                    <img className={classes.img} alt="complex" src={item.data.image} />
+                                </ButtonBase>
                             </Grid>
+                            <Grid item xs={12} sm container>
+                                <Grid item xs container direction="column" spacing={2}>
+                                <Grid item xs>
+                                    <Typography gutterBottom variant="subtitle1">
+                                    {item.data.title}
+                                    </Typography>
+                                    <Typography variant="body2" gutterBottom>
+                                    {item.data.description}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                    {`Precio unitario: ${item.data.price}`}
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    {
+                                        // Agregar contador
+                                    }
+                                </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="subtitle1">{`Subtotal: ${getSubtotalPerItem(item)}`}</Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <Typography variant="subtitle1">{`Precio unitario: ${item.data.price}`}</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant="subtitle1">{`Subtotal: ${getSubtotalPerItem(item)}`}</Typography>
-                            </Grid>
-                        </Grid>
                         </Grid>
                     </Paper>
                 </div>
