@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Button from '@material-ui/core/Button';
 import { CartContext } from '../../store/CartContext';
+import ItemCountContainer from '../ItemCountContainer/ItemCountContainer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,7 +44,7 @@ const Cart = () => {
     const classes = useStyles();
 
     // UseContext : carga la data del carrito desde el contexto y también permite modificarla
-    const [data] = useContext(CartContext);
+    const [data, isInCart, addItem, addToExisting, removeItem, clear] = useContext(CartContext);
 
     const getSubtotalPerItem = (item) => {
         return item.data.price * item.quantity;
@@ -57,51 +58,70 @@ const Cart = () => {
         return total;
     }
 
+    const modifyItemQuantity = (item, newQuantity) => {
+        let itemModified = {
+            data: item.data,
+            quantity: newQuantity
+        };
+        newQuantity > item.quantity ? addItem(itemModified) : removeItem(itemModified);
+    }
+
     return (
         <>
-        <Button className={classes.actions} variant="contained" color="primary">
-            Vaciar carrito
-        </Button>
+        <div className={classes.root}>
+            <Paper className={classes.paper}>
+                <Grid container spacing={1}>
+                    <Grid item>
+                        <Button className={classes.actions} variant="contained" color="primary" onClick={() => clear()}>
+                            Vaciar carrito
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Paper>
+        </div>
         {
-            data.items.map(item => (
-                <div key={item.data.id} className={classes.root}>
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="complex" src={item.data.image} />
-                                </ButtonBase>
-                            </Grid>
-                            <Grid item xs={12} sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                <Grid item xs>
-                                    <Typography gutterBottom variant="subtitle1">
-                                    {item.data.title}
-                                    </Typography>
-                                    <Typography variant="body2" gutterBottom>
-                                    {item.data.description}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                    {`Cantidad de este producto: ${item.quantity}`}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                    {`Precio unitario: ${item.data.price}`}
-                                    </Typography>
-                                </Grid>
+            data.items.map(item => {
+                return (
+                    <div key={item.data.id} className={classes.root}>
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={2}>
                                 <Grid item>
-                                    {
-                                        // Agregar contador
-                                    }
+                                    <ButtonBase className={classes.image}>
+                                        <img className={classes.img} alt="complex" src={item.data.image} />
+                                    </ButtonBase>
                                 </Grid>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="subtitle1">{`Subtotal: ${getSubtotalPerItem(item)}`}</Typography>
+                                <Grid item xs={12} sm container>
+                                    <Grid item xs container direction="column" spacing={2}>
+                                    <Grid item xs>
+                                        <Typography gutterBottom variant="subtitle1">
+                                        {item.data.title}
+                                        </Typography>
+                                        <Typography variant="body2" gutterBottom>
+                                        {item.data.description}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                        {`Cantidad de este producto: ${item.quantity}`}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                        {`Precio unitario: ${item.data.price}`}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <ItemCountContainer stock={item.data.stock} itemQuantity={item.quantity} 
+                                        modifyItemQuantity={(newQuantity) => {
+                                            modifyItemQuantity(item, newQuantity)
+                                        }} />
+                                    </Grid>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography variant="subtitle1">{`Subtotal: ${getSubtotalPerItem(item)}`}</Typography>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    </Paper>
-                </div>
-            ))
+                        </Paper>
+                    </div>
+                )
+            })
         }
         <div className={classes.root}>
             <Paper className={classes.paper}>

@@ -21,7 +21,7 @@ const ItemDetailContainer = () => {
     const history = useHistory();
 
     // UseContext : luego de que presione comprar también debera ir completandose el carrito
-    const [data, isInCart, addItem, removeItem, clear] = useContext(CartContext);
+    const [data, isInCart, addItem, addToExisting, removeItem, clear] = useContext(CartContext);
 
     const getItem = (id) => {
         return new Promise((resolve, reject) => {
@@ -55,7 +55,11 @@ const ItemDetailContainer = () => {
     }
 
     const handleClickAddToCart = () => {
-        addItem(item);
+        if (!!isInCart(item.data.id)) {
+            addToExisting(item);
+        } else {
+            addItem(item);
+        }
         history.push("/cart");
     }
 

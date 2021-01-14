@@ -22,19 +22,8 @@ const CartContextProvider = ({children}) => {
             modifyItem(item);
         }
     }
-    
-    const removeItem = (itemIdToBeRemoved) => {
-        let elementToBeRemoved = isInCart(itemIdToBeRemoved);
 
-        if (!!elementToBeRemoved) {
-            setData({
-                items: data.items.filter(item => item.data.id !== elementToBeRemoved.data.id),
-                totalQuantity: data.totalQuantity - elementToBeRemoved.quantity
-            });
-        }
-    }
-
-    const modifyItem = (itemToModify) => {
+    const addToExisting = (itemToModify) => {
         let elementToBeModify = data.items.findIndex(item => item.data.id === itemToModify.data.id)
 
         if (elementToBeModify > -1) {
@@ -43,7 +32,34 @@ const CartContextProvider = ({children}) => {
                 items: data.items,
                 totalQuantity: data.totalQuantity + itemToModify.quantity
             });
-            console.log(data.items);
+        }
+    }
+    
+    const removeItem = (item) => {
+        let elementToBeRemoved = isInCart(item.data.id);
+
+        if (!!elementToBeRemoved) {
+            if (item.quantity === 0) {
+                setData({
+                    items: data.items.filter(item => item.data.id !== elementToBeRemoved.data.id),
+                    totalQuantity: data.totalQuantity - elementToBeRemoved.quantity
+                });
+            } else {
+                modifyItem(item);
+            }
+        }
+    }
+
+    const modifyItem = (itemToModify) => {
+        let elementToBeModify = data.items.findIndex(item => item.data.id === itemToModify.data.id)
+
+        if (elementToBeModify > -1) {
+            const previousQuantity = data.items[elementToBeModify].quantity;
+            data.items[elementToBeModify].quantity = itemToModify.quantity;
+            setData({
+                items: data.items,
+                totalQuantity: data.totalQuantity - previousQuantity + itemToModify.quantity
+            });
         }
     }
     
@@ -55,7 +71,7 @@ const CartContextProvider = ({children}) => {
     }
 
     return (
-        <CartContext.Provider value={[data, isInCart, addItem, removeItem, clear]}>
+        <CartContext.Provider value={[data, isInCart, addItem, addToExisting, removeItem, clear]}>
             {children}
         </CartContext.Provider>
     )
