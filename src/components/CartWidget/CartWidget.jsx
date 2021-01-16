@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         "& h3": {
             marginBlockEnd: "auto"
         },
-        "& h4": {
+        "& p": {
             marginBlockStart: "auto"
         }
     }
