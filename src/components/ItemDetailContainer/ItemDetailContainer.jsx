@@ -47,6 +47,14 @@ const ItemDetailContainer = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
+    const calculateCurrentStock = () => {
+        const existingItemInCart = isInCart(item.data.id);
+        if (!!existingItemInCart) {
+            return item.data.stock - existingItemInCart.quantity;
+        }
+        return item.data.stock;
+    }
+
     const modifyItemQuantity = (newQuantity) => {
         setItem({
             data: item.data,
@@ -69,7 +77,7 @@ const ItemDetailContainer = () => {
                 item.data ?
                 <section className="itemContainer">
                     <ItemDetail item={item.data} />
-                    <ItemCountContainer stock={item.data.stock} itemQuantity={item.quantity} modifyItemQuantity={modifyItemQuantity} />
+                    <ItemCountContainer stock={calculateCurrentStock()} itemQuantity={item.quantity} modifyItemQuantity={modifyItemQuantity} />
                     <Button variant="contained" color="primary" onClick={handleClickAddToCart}>
                         Agregar a carrito
                     </Button>
