@@ -30,6 +30,15 @@ const useStyles = makeStyles((theme) => ({
     },
     hideSider: {
         display: "none"
+    },
+    itemToShow: {
+        paddingLeft: `2rem`,
+        "& h3": {
+            marginBlockEnd: "auto"
+        },
+        "& h4": {
+            marginBlockStart: "auto"
+        }
     }
 }));
 
@@ -45,6 +54,10 @@ const CartWidget = () => {
         setOpenCart(!openCart);
     }
 
+    const getSubtotalPerItem = (item) => {
+        return item.data.price * item.quantity;
+    }
+
     return (
         <>
             {
@@ -55,7 +68,15 @@ const CartWidget = () => {
                         <span className={classes.cartCounter}>{data.totalQuantity}</span>
                     </IconButton>
                     <div className={`${classes.sider} ${openCart ? classes.showSider : classes.hideSider}`}>
-                        <p>Productos del carrito</p>
+                        {
+                            data.items.map(item => (
+                                <div key={item.data.id} className={classes.itemToShow}>
+                                    <h3>{`${item.data.title} x ${item.quantity}`}</h3>
+                                    <p>{item.data.description}</p>
+                                    <h5>{`Subtotal: $${getSubtotalPerItem(item)}`}</h5>
+                                </div>
+                            ))
+                        }
                     </div>
                 </>
             }
