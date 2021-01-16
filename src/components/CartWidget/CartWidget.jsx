@@ -1,7 +1,8 @@
-import { useState } from 'react'; 
+import { useState, useContext } from 'react'; 
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { CartContext } from '../../store/CartContext';
 
 const useStyles = makeStyles((theme) => ({
     cartIcon: {
@@ -35,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
 const CartWidget = () => {
     const classes = useStyles();
 
+    // UseContext : carga la data del carrito desde el contexto y también permite modificarla
+    const [data] = useContext(CartContext);
+
     const [openCart, setOpenCart] = useState(false);
 
     const handleCartClick = () => {
@@ -43,13 +47,18 @@ const CartWidget = () => {
 
     return (
         <>
-            <IconButton className={classes.cartIcon} onClick={handleCartClick} color="inherit" aria-label="menu">
-                <ShoppingCartIcon />
-                <span className={classes.cartCounter}>0</span>
-            </IconButton>
-            <div className={`${classes.sider} ${openCart ? classes.showSider : classes.hideSider}`}>
-                <p>Productos del carrito</p>
-            </div>
+            {
+                !!data.totalQuantity &&
+                <>
+                    <IconButton className={classes.cartIcon} onClick={handleCartClick} color="inherit" aria-label="menu">
+                        <ShoppingCartIcon />
+                        <span className={classes.cartCounter}>{data.totalQuantity}</span>
+                    </IconButton>
+                    <div className={`${classes.sider} ${openCart ? classes.showSider : classes.hideSider}`}>
+                        <p>Productos del carrito</p>
+                    </div>
+                </>
+            }
         </>
     )
 }

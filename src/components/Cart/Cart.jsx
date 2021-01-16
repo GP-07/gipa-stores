@@ -130,7 +130,7 @@ const Cart = () => {
                                             </Grid>
                                             </Grid>
                                             <Grid item>
-                                                <Typography variant="subtitle1">{`Subtotal: ${getSubtotalPerItem(item)}`}</Typography>
+                                                <Typography variant="subtitle1">{`Subtotal: $${getSubtotalPerItem(item)}`}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -146,7 +146,7 @@ const Cart = () => {
                                 <p className={classes.totalQuantity}>{`Cantidad total de productos: ${data.totalQuantity}`}</p>
                             </Grid>
                             <Grid item>
-                                <p className={classes.totalAmount}>{`Precio total: ${getTotal()}`}</p>
+                                <p className={classes.totalAmount}>{`Precio total: $${getTotal()}`}</p>
                             </Grid>
                         </Grid>
                     </Paper>
