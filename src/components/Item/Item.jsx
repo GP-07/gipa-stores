@@ -29,18 +29,18 @@ const Item = ({item}) => {
         <Card className={classes.root}>
             <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    {item.title}
+                    {item.data.title}
                 </Typography>
                 <Typography variant="h5" component="h2">
-                    {item.title}
+                    {item.data.title}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                    {item.title}
+                    {item.data.title}
                 </Typography>
-                <img src={item.image} alt={item.title} />
+                <img src={item.data.image} alt={item.data.title} />
                 <Typography variant="body2" component="p">
                     <br />
-                    Precio: {item.price}
+                    Precio: {item.data.price}
                 </Typography>
             </CardContent>
             <CardActions>
