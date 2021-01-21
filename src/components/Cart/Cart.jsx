@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     },
     actions: {
         position: "absolute",
-        top: `5rem`,
         right: `2rem`,
     },
     noLinkStyle: {
@@ -81,11 +80,18 @@ const Cart = () => {
             <>
                 <div className={classes.root}>
                     <Paper className={classes.paper}>
-                        <Grid container spacing={1}>
+                        <Grid container spacing={2}>
                             <Grid item>
-                                <Button className={classes.actions} variant="contained" color="primary" onClick={() => clear()}>
+                                <Button variant="contained" color="primary" onClick={() => clear()}>
                                     Vaciar carrito
                                 </Button>
+                            </Grid>
+                            <Grid item>
+                                <Link to="/checkout" className={classes.noLinkStyle}>
+                                    <Button className={classes.actions} variant="contained" color="primary">
+                                        Finalizar compra
+                                    </Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     </Paper>
