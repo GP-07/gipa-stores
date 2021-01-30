@@ -46,7 +46,7 @@ const CartWidget = () => {
     const classes = useStyles();
 
     // UseContext : carga la data del carrito desde el contexto y también permite modificarla
-    const [data] = useContext(CartContext);
+    const {data} = useContext(CartContext);
 
     const [openCart, setOpenCart] = useState(false);
 

@@ -1,11 +1,13 @@
 import { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/app';
 import { CartContext } from '../../store/CartContext';
 import "./Checkout.css";
 import { getFirestore } from '../../db/index';
+import CheckoutDialog from './CheckoutDialog';
 
 const Checkout = () => {
-    const [data, isInCart, addItem, addToExisting, removeItem, clear] = useContext(CartContext);
+    const {data, clear} = useContext(CartContext);
     const [formData, setFormData] = useState({
         name: '',
         surname: '',
@@ -14,6 +16,8 @@ const Checkout = () => {
     });
     const [completedSale, setCompletedSale] = useState(false);
     const [orderNumber, setOrderNumber] = useState('');
+    const [open, setOpen] = useState(false);
+    const history = useHistory();
     const db = getFirestore();
 
     const handleChangeInput = e => {
@@ -36,16 +40,23 @@ const Checkout = () => {
             .then(({ id }) => {
                 setCompletedSale(true);
                 setOrderNumber(id);
+                setOpen(true);
+                clear();
             })
             .catch(error => {
                 console.log("Ha ocurrido un error al grabar la venta: ", error);
             });
     }
 
+    const handleClose = () => {
+        setOpen(false);
+        history.push("/");
+    }
+
     return (
         <>
         {
-            !completedSale ?
+            !completedSale ? (
             <form className="form" onSubmit={saveSale}>
                 <h1 className="formTitle">Complete sus datos para poder finalizar la compra!</h1>
                 <div>
@@ -83,8 +94,8 @@ const Checkout = () => {
                     />
                 </div>
                 <button className="formButton" type="submit">Pagar</button>
-            </form> : 
-            <p>Su compra ha sido registrada con éxito. Número de order: {orderNumber}</p>
+            </form>) : 
+            <CheckoutDialog orderNumber={orderNumber} open={open} handleClose={handleClose} />
         }
         </>
     )

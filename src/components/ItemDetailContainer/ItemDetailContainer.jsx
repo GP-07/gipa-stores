@@ -21,7 +21,7 @@ const ItemDetailContainer = () => {
     const history = useHistory();
 
     // UseContext : luego de que presione comprar también debera ir completandose el carrito
-    const [data, isInCart, addItem, addToExisting, removeItem, clear] = useContext(CartContext);
+    const {isInCart, addItem, addToExisting} = useContext(CartContext);
 
     // Configuración de la db para hacer las llamadas necesarias
     const db = getFirestore();

@@ -47,7 +47,7 @@ const Cart = () => {
     const classes = useStyles();
 
     // UseContext : carga la data del carrito desde el contexto y también permite modificarla
-    const [data, isInCart, addItem, addToExisting, removeItem, clear] = useContext(CartContext);
+    const {data, addItem, removeItem, clear} = useContext(CartContext);
 
     const getSubtotalPerItem = (item) => {
         return item.data.price * item.quantity;
