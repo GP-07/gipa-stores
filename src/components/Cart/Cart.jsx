@@ -40,6 +40,11 @@ const useStyles = makeStyles((theme) => ({
     },
     noLinkStyle: {
         textDecoration: `none`,
+    },
+    removeButton: {
+        display: `flex`,
+        flexDirection: `column`,
+        justifyContent: `space-between`,
     }
 }));
 
@@ -109,34 +114,36 @@ const Cart = () => {
                                         </Grid>
                                         <Grid item xs={12} sm container>
                                             <Grid item xs container direction="column" spacing={2}>
-                                            <Grid item xs>
-                                                <Typography gutterBottom variant="subtitle1">
-                                                {item.data.title}
-                                                </Typography>
-                                                <Typography variant="body2" gutterBottom>
-                                                {item.data.description}
-                                                </Typography>
-                                                <Typography variant="body2" color="textSecondary">
-                                                {`Cantidad de este producto: ${item.quantity}`}
-                                                </Typography>
-                                                <Typography variant="body2" color="textSecondary">
-                                                {`Precio unitario: ${item.data.price}`}
-                                                </Typography>
+                                                <Grid item xs>
+                                                    <Typography gutterBottom variant="subtitle1">
+                                                    {item.data.title}
+                                                    </Typography>
+                                                    <Typography variant="body2" gutterBottom>
+                                                    {item.data.description}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="textSecondary">
+                                                    {`Cantidad de este producto: ${item.quantity}`}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="textSecondary">
+                                                    {`Precio unitario: ${item.data.price}`}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item container spacing={2}>
+                                                    <ItemCountContainer stock={item.data.stock} itemQuantity={item.quantity} 
+                                                    modifyItemQuantity={(newQuantity) => {
+                                                        modifyItemQuantity(item, newQuantity)
+                                                    }} />
+                                                </Grid>
                                             </Grid>
-                                            <Grid item container spacing={2}>
-                                                <ItemCountContainer stock={item.data.stock} itemQuantity={item.quantity} 
-                                                modifyItemQuantity={(newQuantity) => {
-                                                    modifyItemQuantity(item, newQuantity)
-                                                }} />
-                                                <Button variant="contained" color="primary" onClick={() => {
-                                                    removeWholeItem(item)
-                                                }}>
+                                            <Grid item className={classes.removeButton}>
+                                                <Typography variant="subtitle1">{`Subtotal: $${getSubtotalPerItem(item)}`}</Typography>
+                                                <Button 
+                                                    variant="contained" 
+                                                    color="primary" 
+                                                    onClick={() => removeWholeItem(item)}
+                                                >
                                                     Eliminar producto del carrito
                                                 </Button>
-                                            </Grid>
-                                            </Grid>
-                                            <Grid item>
-                                                <Typography variant="subtitle1">{`Subtotal: $${getSubtotalPerItem(item)}`}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>

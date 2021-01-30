@@ -7,10 +7,14 @@ const ItemDetail = ({item}) => (
             <img src={item.image} alt={item.title} />
             <div>
                 <h2 className="sider">{item.description}</h2>
-                <p className="sider">Colores disponibles: </p>
+                {
+                    item.available_colours.length ? 
+                    <p className="sider">Colores disponibles: </p> :
+                    <p className="sider">El color que se ve en la imagen es el único disponible!</p>
+                }
                 {
                     item.available_colours.map((available_colour, index) => (
-                        <div key={index} className={`sider square ${available_colour}-background`} />
+                        <div key={index} className={`square ${available_colour}-background`} />
                     ))
                 }
                 <p className="sider">Precio: {item.currency}{item.price}</p>
