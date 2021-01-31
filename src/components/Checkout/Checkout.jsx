@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/app';
 import { CartContext } from '../../store/CartContext';
@@ -9,6 +9,16 @@ import CheckoutDialog from './CheckoutDialog';
 const Checkout = () => {
     const {data, clear} = useContext(CartContext);
     const [formData, setFormData] = useState({
+        name: '',
+        surname: '',
+        phone: '', 
+        email_address: ''
+    });
+    const nameInput = useRef(null);
+    const surnameInput = useRef(null);
+    const phoneInput = useRef(null);
+    const emailAddressInput = useRef(null);
+    const [errors, setErrors] = useState({
         name: '',
         surname: '',
         phone: '', 
@@ -36,7 +46,8 @@ const Checkout = () => {
 
     const saveSale = e => {
         e.preventDefault();
-        db.collection("sales").add(sale)
+        if (isValidForm()) {
+            db.collection("sales").add(sale)
             .then(({ id }) => {
                 setCompletedSale(true);
                 setOrderNumber(id);
@@ -46,6 +57,59 @@ const Checkout = () => {
             .catch(error => {
                 console.log("Ha ocurrido un error al grabar la venta: ", error);
             });
+        }
+    }
+
+    const handleBlur = e => {
+        isValidForm();
+    }
+
+    const isValidForm = () => {
+        let validationResult = true;
+
+        const nameRegex = new RegExp(/^[a-zA-Z\s]{3,10}$/);
+        const surnameRegex = new RegExp(/^[a-zA-Z\s]{3,10}$/);
+        const phoneRegex = new RegExp(/(\+\d{1,2}\s\d{1,3}\s\d{4}\-\d{4})$/);
+        const emailRegex = new RegExp(/^[a-zA-Z\s]{3,10}$/);
+
+        let errorsDetected = { ...errors };
+
+        if (!nameRegex.test(formData.name.trim())) {
+            nameInput.current.style.border = "1px solid red";
+            errorsDetected = {...errorsDetected, name: 'El nombre debe contener entre 3 y 10 caracteres y solo admite minúsculas, mayúsculas y espacios'};
+            validationResult = false;
+        } else {
+            errorsDetected = {...errorsDetected, name: ''};
+            nameInput.current.style.border = "";
+        }
+
+        if (!surnameRegex.test(formData.surname.trim())) {
+            surnameInput.current.style.border = "1px solid red";
+            errorsDetected = {...errorsDetected, surname: 'El apellido debe contener entre 3 y 10 caracteres y solo admite minúsculas, mayúsculas y espacios'};
+            validationResult = false;
+        } else {
+            errorsDetected = {...errorsDetected, surname: ''};
+            surnameInput.current.style.border = "";
+        }
+
+        if (!phoneRegex.test(formData.phone.trim())) {
+            phoneInput.current.style.border = "1px solid red";
+            errorsDetected = {...errorsDetected, phone: 'El telefono debe tener la siguiente estructura: +54 011 4444-5555'};
+            validationResult = false;
+        } else {
+            errorsDetected = {...errorsDetected, phone: ''};
+            phoneInput.current.style.border = "";
+        }
+
+        if (!emailRegex.test(formData.email_address.trim())) {
+            emailAddressInput.current.style.border = "1px solid red";
+            validationResult = false;
+        } else {
+            emailAddressInput.current.style.border = "";
+        }
+
+        setErrors(errorsDetected);        
+        return validationResult;
     }
 
     const handleClose = () => {
@@ -57,14 +121,25 @@ const Checkout = () => {
         <>
         {
             !completedSale ? (
-            <form className="form" onSubmit={saveSale}>
+            <form className="form" onSubmit={saveSale} onBlur={handleBlur}>
                 <h1 className="formTitle">Complete sus datos para poder finalizar la compra!</h1>
+                {
+                    Object.entries(errors).filter(error => error[1] !== '').length && 
+                    <ul>
+                        {
+                            Object.entries(errors).filter(error => error[1] !== '').map((error, index) => (
+                                <li key={index} style={{color: 'red'}}><span>{error[1]}</span></li>
+                            ))
+                        }
+                    </ul>
+                }
                 <div>
                     <input 
                         className="formInput" 
                         type="text" 
                         name="name" 
                         placeholder="Name"
+                        ref={nameInput}
                         value={formData.name}
                         onChange={handleChangeInput}
                     />
@@ -73,6 +148,7 @@ const Checkout = () => {
                         type="text" 
                         name="surname" 
                         placeholder="Surname"
+                        ref={surnameInput}
                         value={formData.surname}
                         onChange={handleChangeInput}
                     />
@@ -81,14 +157,16 @@ const Checkout = () => {
                         type="text" 
                         name="phone" 
                         placeholder="Phone number"
+                        ref={phoneInput}
                         value={formData.phone}
                         onChange={handleChangeInput}
                     />
                     <input 
                         className="formInput" 
-                        type="text" 
+                        type="email" 
                         name="email_address" 
                         placeholder="Email address"
+                        ref={emailAddressInput}
                         value={formData.email_address}
                         onChange={handleChangeInput}
                     />
