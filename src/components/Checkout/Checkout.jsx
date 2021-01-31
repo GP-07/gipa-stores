@@ -57,6 +57,8 @@ const Checkout = () => {
             .catch(error => {
                 console.log("Ha ocurrido un error al grabar la venta: ", error);
             });
+        } else {
+            alert("El formulario contiene algún campo invalido. Por favor, revisar!");
         }
     }
 
@@ -67,54 +69,67 @@ const Checkout = () => {
     const isValidForm = () => {
         let validationResult = true;
 
-        const nameRegex = new RegExp(/^[a-zA-Z\s]{3,10}$/);
-        const surnameRegex = new RegExp(/^[a-zA-Z\s]{3,10}$/);
-        const phoneRegex = new RegExp(/(\+\d{1,2}\s\d{1,3}\s\d{4}\-\d{4})$/);
-        const emailRegex = new RegExp(/^[a-zA-Z\s]{3,10}$/);
+        const nameRegex = new RegExp(/^\b([a-zÀ-ÿ][-,a-z. ']+[ ]*)+/i);
+        const surnameRegex = new RegExp(/^\b([a-zÀ-ÿ][-,a-z. ']+[ ]*)+/i);
+        const phoneRegex = new RegExp(/^(\+\d{1,2}\s\d{1,3}\s\d{4}\-\d{4})$/);
+        // Regex used in type="email" from W3C:
+        const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 
         let errorsDetected = { ...errors };
 
         if (!nameRegex.test(formData.name.trim())) {
             nameInput.current.style.border = "1px solid red";
-            errorsDetected = {...errorsDetected, name: 'El nombre debe contener entre 3 y 10 caracteres y solo admite minúsculas, mayúsculas y espacios'};
-            validationResult = false;
+            errorsDetected = {...errorsDetected, name: 'Por favor, ingrese un nombre valido. Se aceptan minúsculas, mayúsculas, espacios, guiones medio, comas, puntos y algunos ciertos caracteres especiales'};
         } else {
-            errorsDetected = {...errorsDetected, name: ''};
             nameInput.current.style.border = "";
+            errorsDetected = {...errorsDetected, name: ''};
         }
 
         if (!surnameRegex.test(formData.surname.trim())) {
             surnameInput.current.style.border = "1px solid red";
-            errorsDetected = {...errorsDetected, surname: 'El apellido debe contener entre 3 y 10 caracteres y solo admite minúsculas, mayúsculas y espacios'};
-            validationResult = false;
+            errorsDetected = {...errorsDetected, surname: 'Por favor, ingrese un apellido valido. Se aceptan minúsculas, mayúsculas, espacios, guiones medio, comas, puntos y algunos ciertos caracteres especiales'};
         } else {
-            errorsDetected = {...errorsDetected, surname: ''};
             surnameInput.current.style.border = "";
+            errorsDetected = {...errorsDetected, surname: ''};
         }
 
         if (!phoneRegex.test(formData.phone.trim())) {
             phoneInput.current.style.border = "1px solid red";
-            errorsDetected = {...errorsDetected, phone: 'El telefono debe tener la siguiente estructura: +54 011 4444-5555'};
-            validationResult = false;
+            errorsDetected = {...errorsDetected, phone: 'Por favor, ingrese un número de teléfono valido. Para ser valido debe responder a la siguiente estructura: +54 011 4444-5555'};
         } else {
-            errorsDetected = {...errorsDetected, phone: ''};
             phoneInput.current.style.border = "";
+            errorsDetected = {...errorsDetected, phone: ''};
         }
 
         if (!emailRegex.test(formData.email_address.trim())) {
             emailAddressInput.current.style.border = "1px solid red";
-            validationResult = false;
+            errorsDetected = {...errorsDetected, email_address: 'Por favor, ingrese una dirección de mail valida: nombre@dominio.com'};
         } else {
             emailAddressInput.current.style.border = "";
+            errorsDetected = {...errorsDetected, email_address: ''};
         }
 
-        setErrors(errorsDetected);        
+        if (![errorsDetected.name, errorsDetected.surname, errorsDetected.phone, errorsDetected.email_address].includes('')) {
+            validationResult = false;
+        }
+
+        setErrors(errorsDetected);
         return validationResult;
     }
 
     const handleClose = () => {
         setOpen(false);
         history.push("/");
+    }
+
+    const getCurrentErrors = () => {
+        return Object.entries(errors).filter(error => error[1] !== '');
+    }
+
+    const disableSaveButton = () => {
+        return !!getCurrentErrors().length || 
+        // Below configuration describes the initial state of the component when it is mounted
+        (formData.name === '' && formData.surname === '' && formData.phone === '' && formData.email_address === '');
     }
 
     return (
@@ -124,10 +139,10 @@ const Checkout = () => {
             <form className="form" onSubmit={saveSale} onBlur={handleBlur}>
                 <h1 className="formTitle">Complete sus datos para poder finalizar la compra!</h1>
                 {
-                    Object.entries(errors).filter(error => error[1] !== '').length && 
+                    !!getCurrentErrors().length && 
                     <ul>
                         {
-                            Object.entries(errors).filter(error => error[1] !== '').map((error, index) => (
+                            getCurrentErrors().map((error, index) => (
                                 <li key={index} style={{color: 'red'}}><span>{error[1]}</span></li>
                             ))
                         }
@@ -163,7 +178,7 @@ const Checkout = () => {
                     />
                     <input 
                         className="formInput" 
-                        type="email" 
+                        type="text" 
                         name="email_address" 
                         placeholder="Email address"
                         ref={emailAddressInput}
@@ -171,7 +186,7 @@ const Checkout = () => {
                         onChange={handleChangeInput}
                     />
                 </div>
-                <button className="formButton" type="submit">Pagar</button>
+                <button className="formButton" type="submit" disabled={disableSaveButton()}>Pagar</button>
             </form>) : 
             <CheckoutDialog orderNumber={orderNumber} open={open} handleClose={handleClose} />
         }

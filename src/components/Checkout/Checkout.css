@@ -31,3 +31,10 @@
 .formButton:hover {
     background: #2371a0;
 }
+
+.formButton:disabled,
+.formButton[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
