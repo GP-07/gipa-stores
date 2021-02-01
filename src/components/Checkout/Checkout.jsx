@@ -71,7 +71,7 @@ const Checkout = () => {
 
         const nameRegex = new RegExp(/^\b([a-zÀ-ÿ][-,a-z. ']+[ ]*)+/i);
         const surnameRegex = new RegExp(/^\b([a-zÀ-ÿ][-,a-z. ']+[ ]*)+/i);
-        const phoneRegex = new RegExp(/^(\+\d{1,2}\s\d{1,3}\s\d{4}\-\d{4})$/);
+        const phoneRegex = new RegExp(/^(\+\d{1,2}\s\d{1,3}\s\d{4}-\d{4})$/);
         // Regex used in type="email" from W3C:
         const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 

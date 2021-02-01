@@ -61,12 +61,16 @@ const ItemDetailContainer = () => {
     }
 
     const handleClickAddToCart = () => {
-        if (!!isInCart(item.data.id)) {
-            addToExisting(item);
+        if (item.quantity > 0) {
+            if (!!isInCart(item.data.id)) {
+                addToExisting(item);
+            } else {
+                addItem(item);
+            }
+            history.push("/cart");
         } else {
-            addItem(item);
+            alert("No se puede agregar cantidad 0 de un producto al carrito. Por favor, ingrese una cantidad valida!");
         }
-        history.push("/cart");
     }
 
     return (
@@ -76,7 +80,7 @@ const ItemDetailContainer = () => {
                 <section className="itemContainer">
                     <ItemDetail item={item.data} />
                     <ItemCountContainer stock={calculateCurrentStock()} itemQuantity={item.quantity} modifyItemQuantity={modifyItemQuantity} />
-                    <Button variant="contained" color="primary" onClick={handleClickAddToCart}>
+                    <Button variant="contained" color="primary" disabled={item.quantity === 0} onClick={handleClickAddToCart}>
                         Agregar a carrito
                     </Button>
                     <div className="relatedProducts">Productos recomendados</div>
