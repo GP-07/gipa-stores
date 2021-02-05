@@ -14,7 +14,7 @@ const CartContextProvider = ({children}) => {
     
     const addItem = (item) => {
         if (!isInCart(item.data.id)) {
-            setData({
+            updateCartAndStorage({
                 items: [...data.items, item],
                 totalQuantity: data.totalQuantity + item.quantity
             });
@@ -28,7 +28,7 @@ const CartContextProvider = ({children}) => {
 
         if (elementToBeModify > -1) {
             data.items[elementToBeModify].quantity = data.items[elementToBeModify].quantity + itemToModify.quantity;
-            setData({
+            updateCartAndStorage({
                 items: data.items,
                 totalQuantity: data.totalQuantity + itemToModify.quantity
             });
@@ -40,7 +40,7 @@ const CartContextProvider = ({children}) => {
 
         if (!!elementToBeRemoved) {
             if (item.quantity === 0) {
-                setData({
+                updateCartAndStorage({
                     items: data.items.filter(item => item.data.id !== elementToBeRemoved.data.id),
                     totalQuantity: data.totalQuantity - elementToBeRemoved.quantity
                 });
@@ -56,7 +56,7 @@ const CartContextProvider = ({children}) => {
         if (elementToBeModify > -1) {
             const previousQuantity = data.items[elementToBeModify].quantity;
             data.items[elementToBeModify].quantity = itemToModify.quantity;
-            setData({
+            updateCartAndStorage({
                 items: data.items,
                 totalQuantity: data.totalQuantity - previousQuantity + itemToModify.quantity
             });
@@ -64,14 +64,23 @@ const CartContextProvider = ({children}) => {
     }
     
     const clear = () => {
-        setData({
+        updateCartAndStorage({
             items: [],
             totalQuantity: 0
         });
     }
 
+    const loadCartFromStorage = (storageData) => {
+        setData(storageData);
+    }
+
+    const updateCartAndStorage = (updatedData) => {
+        setData(updatedData);
+        localStorage.setItem("products", JSON.stringify(updatedData));
+    }
+
     return (
-        <CartContext.Provider value={{data, isInCart, addItem, addToExisting, removeItem, clear}}>
+        <CartContext.Provider value={{data, isInCart, addItem, addToExisting, removeItem, clear, loadCartFromStorage}}>
             {children}
         </CartContext.Provider>
     )
